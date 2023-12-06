@@ -1,73 +1,119 @@
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import {View, Text} from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icons from 'react-native-vector-icons/Ionicons';
-import FontAwesome from 'react-native-vector-icons/FontAwesome5';
-import Services from './All_Services';
+import { StyleSheet, View} from 'react-native';
+import { MenuProvider } from 'react-native-popup-menu';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-const Tab = createBottomTabNavigator();
+import AllServices from './AllServices';
 
-const Transaction = () =>{
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Transaction</Text>
-        </View>
-    );
-}
+import AddCustomer from './subscreens/AddCustomer';
+import AddService from './subscreens/AddService';
+import ServiceDetail from './subscreens/ServiceDetail';
+import UpdateService from './subscreens/UpdateService';
+import { Button, Text } from 'react-native-paper';
+
+const Stack = createStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
+
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Home" component={AllServices} options={{ 
+      headerTitle: 'HUYỀN TRINH',
+      headerRight: () => (
+        <MaterialIcon name="account-circle" color="#fff" size={26} style={{right: 12}}/>
+      ),
+      headerStyle: {
+        backgroundColor: '#EF506B',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      }} />
+    <Stack.Screen
+      name="ServiceDetail"
+      component={ServiceDetail}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen name="AddService" component={AddService} />
+    <Stack.Screen name="UpdateService" component={UpdateService} />
+  </Stack.Navigator>
+);
 
 const Customer = () =>{
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Customer</Text>
-        </View>
-    );
+  return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Customer</Text>
+      </View>
+  );
+}
+
+const Transaction = () =>{
+  return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Transaction</Text>
+      </View>
+  );
 }
 
 const Setting = () =>{
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text>Setting</Text>
-        </View>
-    );
+  return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>Setting</Text>
+      </View>
+  );
 }
 
-const BottomTabs =() => {
-    return (
+const Main = () => {
+  return (
+    <SafeAreaProvider>
+      <MenuProvider
+        style={styles.container}
+        customStyles={{ backdrop: styles.backdrop }}>
         <Tab.Navigator>
-            <Tab.Screen name="Home" component={Services} 
-                options={{
-                tabBarActiveTintColor: '#EF506B',
-                tabBarLabel: 'Home',
-                tabBarIcon: ({color, size }) => (
-                    <Icons name="home" color={color} size={size} />
-                ),
-            }}/>
-            <Tab.Screen name="Transaction" component={Transaction}
-                options={{
-                    tabBarActiveTintColor: '#EF506B',
-                    tabBarLabel: 'Transaction',
-                    tabBarIcon: ({ color, size }) => (
-                        <FontAwesome name="money-bill" color={color} size={size} />
-                    ),
-            }}/>
-            <Tab.Screen name="Customer" component={Customer}
-                options={{
-                    tabBarActiveTintColor: '#EF506B',
-                    tabBarLabel: 'Customer',
-                    tabBarIcon: ({ color, size }) => (
-                        <Icons name="people-outline" color={color} size={size} />
-                    ),
-            }}/>
-            <Tab.Screen name="Setting" component={Setting}
-                options={{
-                    tabBarActiveTintColor: '#EF506B',
-                    tabBarLabel: 'Setting',
-                    tabBarIcon: ({ color, size }) => (
-                        <Icons name="settings-outline" color={color} size={size} />
-                    ),
-            }}/>
+          <Tab.Screen name="Home" component={HomeStack} options={{
+            tabBarActiveTintColor: '#EF506B',
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color }) => (
+              <Icon name="home" color={color} size={26} />
+            ),
+          }} />
+          <Tab.Screen name="Customer" component={Customer} options={{
+            tabBarActiveTintColor: '#EF506B',
+            tabBarLabel: 'Customer',
+            tabBarIcon: ({ color }) => (
+              <Icon name="people" color={color} size={26} />
+            ),
+          }} />
+          <Tab.Screen name="Transaction" component={Transaction} options={{
+            tabBarActiveTintColor: '#EF506B',
+            tabBarLabel: 'Transaction',
+            tabBarIcon: ({ color }) => (
+              <Icon name="cash" color={color} size={26} />
+            ),
+          }} />
+          <Tab.Screen name="Settings" component={Setting} options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color }) => (
+              <Icon name="settings" color={color} size={26} />
+            ),
+          }} />
         </Tab.Navigator>
-    );
-}
+      </MenuProvider>
+    </SafeAreaProvider>
+  );
+};
 
-export default BottomTabs;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+});
+
+export default Main;
